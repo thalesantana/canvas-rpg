@@ -10,11 +10,11 @@ import { moveTowards } from './src/helpers/moveTowards.js';
 import { walls } from './src/levels/level1.js';
 import { FrameIndexPattern } from './src/FrameIndexPattern.js';
 import {
-  //PICK_UP_DOWN,
-  // STAND_DOWN,
-  // STAND_LEFT,
-  // STAND_RIGHT,
-  // STAND_UP,
+ // PICK_UP_DOWN,
+  STAND_DOWN,
+  STAND_LEFT,
+  STAND_RIGHT,
+  STAND_UP,
   WALK_DOWN,
   WALK_LEFT,
   WALK_RIGHT,
@@ -43,14 +43,20 @@ const hero = new Sprite({
   frame: 1,
   position: new Vector2(gridCells(6), gridCells(5)),
   animations: new Animations({
+    walkDown: new FrameIndexPattern(WALK_DOWN),
     walkUp: new FrameIndexPattern(WALK_UP),
     walkLeft: new FrameIndexPattern(WALK_LEFT),
-    walkDown: new FrameIndexPattern(WALK_DOWN),
     walkRight: new FrameIndexPattern(WALK_RIGHT),
+    standDown: new FrameIndexPattern(STAND_DOWN),
+    standUp: new FrameIndexPattern(STAND_UP),
+    standLeft: new FrameIndexPattern(STAND_LEFT),
+    standRight: new FrameIndexPattern(STAND_RIGHT),
+    //pickUpDown: new FrameIndexPattern(PICK_UP_DOWN),
   })
 })
 
 const heroDestinationPosition = hero.position.duplicate();
+let heroFacing = DOWN;
 
 const shadow = new Sprite({
   resource: resources.images.shadow,
@@ -74,7 +80,13 @@ const update = (delta) => {
 
 const tryMove = () => {
 
-  if(!input.direction) {
+  if (!input.direction) {
+
+    if (heroFacing === LEFT) { hero.animations.play("standLeft")}
+    if (heroFacing === RIGHT) { hero.animations.play("standRight")}
+    if (heroFacing === UP) { hero.animations.play("standUp")}
+    if (heroFacing=== DOWN) { hero.animations.play("standDown")}
+
     return;
   }
 
@@ -84,20 +96,22 @@ const tryMove = () => {
 
   if(input.direction === DOWN) {
     nextY += gridSize; 
-    hero.frame = 0;
+    hero.animations.play("walkDown")
   }
   if(input.direction === UP) {
-    nextY -= gridSize; 
-    hero.frame = 6  
+    nextY -= gridSize;
+    hero.animations.play("walkUp") 
   }
   if(input.direction === LEFT) {
     nextX -= gridSize;
-    hero.frame = 9
+    hero.animations.play("walkLeft")
   }
   if(input.direction === RIGHT) {
     nextX += gridSize;
-    hero.frame = 3
+    hero.animations.play("walkRight")
   }
+
+  heroFacing = input.direction ?? heroFacing;
 
   // Validating that the next destination is free
   if(isSpaceFree(walls, nextX, nextY )){
