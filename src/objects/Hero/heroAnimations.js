@@ -12,25 +12,25 @@ const makeStandingFrames = (rootFrame = 0) => {
 
 const makeWalkingFrames = (rootFrame = 0) => {
   return {
-      duration: 400,
-      frames: [
-        {
-          time: 0,
-          grame: rootFrame+1,
-        },
-        {
-          time: 100,
-          grame: rootFrame,
-        },
-        {
-          time: 200,
-          grame: rootFrame+1,
-        },
-        {
-          time: 300,
-          grame: rootFrame+2,
-        }
-      ]
+    duration: 400,
+    frames: [
+      {
+        time: 0,
+        frame: rootFrame+1,
+      },
+      {
+        time: 100,
+        frame: rootFrame,
+      },
+      {
+        time: 200,
+        frame: rootFrame+1,
+      },
+      {
+        time: 300,
+        frame: rootFrame+2,
+      }
+    ]
   }
 }
 

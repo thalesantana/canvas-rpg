@@ -1,5 +1,3 @@
-import { FrameIndexPattern } from "./FrameIndexPattern";
-
 export class Animations {
   constructor(patterns){
     this.patterns = patterns;
