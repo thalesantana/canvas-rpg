@@ -4,10 +4,10 @@ import { Input } from './src/Input.js';
 import { resources } from './src/Resource.js';
 import { Sprite } from './src/Sprite.js';
 import { Vector2 } from './src/Vector2.js';
+import { events } from './src/events.js';
 import { gridCells } from './src/helpers/grid.js';
 import { Hero } from './src/objects/Hero/Hero.js';
 import './style.css';
-//import {events} from "../../Events.js";
 
 // Grabbing the canvas to draw to
 const canvas = document.querySelector("#game-canvas");
@@ -38,6 +38,10 @@ mainScene.addChild(hero);
 
 // Add an Input class to the main scene
 mainScene.input = new Input();
+
+events.on("HERO_POSITION", mainScene, heroPosition => {
+  console.log("Hero Moved!", heroPosition)
+})
 
 // Establish update and draw loops
 const update = (delta) => {

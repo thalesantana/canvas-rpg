@@ -1,7 +1,7 @@
 import { Animations } from "../../Animations.js";
 import { FrameIndexPattern } from "../../FrameIndexPattern.js";
 import { GameObject } from "../../GameObject.js";
-import { gridCells, isSpaceFree } from "../../helpers/grid.js";
+import { isSpaceFree } from "../../helpers/grid.js";
 import { DOWN, LEFT, RIGHT, UP } from "../../Input.js";
 import { walls } from "../../levels/level1.js";
 import { resources } from "../../Resource.js";
@@ -19,6 +19,7 @@ import {
   WALK_RIGHT,
   WALK_UP
 } from "./heroAnimations.js";
+import { events } from "../../events.js";
 
 export class Hero extends GameObject {
   constructor(x, y) {
@@ -65,6 +66,17 @@ export class Hero extends GameObject {
     if (hasArrived) {
       this.tryMove(root)
     }
+
+    this.tryEmitPosition()
+  }
+
+  tryEmitPosition() {
+    if (this.lastX === this.position.x && this.lastY === this.position.y) {
+      return;
+    }
+    this.lastX = this.position.x;
+    this.lastY = this.position.y;
+    events.emit("HERO_POSITION", this.position)
   }
 
   tryMove(root) {
@@ -75,7 +87,7 @@ export class Hero extends GameObject {
       if (this.facingDirection === LEFT) { this.body.animations.play("standLeft")}
       if (this.facingDirection === RIGHT) { this.body.animations.play("standRight")}
       if (this.facingDirection === UP) { this.body.animations.play("standUp")}
-      if (this.facingDirection=== DOWN) { this.body.animations.play("standDown")}
+      if (this.facingDirection === DOWN) { this.body.animations.play("standDown")}
   
       return;
     }
@@ -101,7 +113,7 @@ export class Hero extends GameObject {
       this.body.animations.play("walkRight")
     }
   
-    this.facingDIrection = input.direction ?? this.facingDIrection ;
+    this.facingDirection = input.direction ?? this.facingDirection;
   
     // Validating that the next destination is free
     if(isSpaceFree(walls, nextX, nextY )){
