@@ -1,12 +1,12 @@
+import { Camera } from './src/Camera.js';
 import { GameLoop } from './src/GameLoop.js';
 import { GameObject } from './src/GameObject.js';
+import { gridCells } from './src/helpers/grid.js';
 import { Input } from './src/Input.js';
+import { Hero } from './src/objects/Hero/Hero.js';
 import { resources } from './src/Resource.js';
 import { Sprite } from './src/Sprite.js';
 import { Vector2 } from './src/Vector2.js';
-import { events } from './src/events.js';
-import { gridCells } from './src/helpers/grid.js';
-import { Hero } from './src/objects/Hero/Hero.js';
 import './style.css';
 
 // Grabbing the canvas to draw to
@@ -24,8 +24,6 @@ const skySprite = new Sprite({
   frameSize: new Vector2(320, 180)
 })
 
-mainScene.addChild(skySprite);
-
 const groundSprite = new Sprite({
   resource: resources.images.ground,
   frameSize: new Vector2(320, 180)
@@ -36,12 +34,11 @@ mainScene.addChild(groundSprite);
 const hero = new Hero(gridCells(6),  gridCells(5))
 mainScene.addChild(hero);
 
+const camera = new Camera();
+mainScene.addChild(camera)
+
 // Add an Input class to the main scene
 mainScene.input = new Input();
-
-events.on("HERO_POSITION", mainScene, heroPosition => {
-  console.log("Hero Moved!", heroPosition)
-})
 
 // Establish update and draw loops
 const update = (delta) => {
@@ -49,7 +46,24 @@ const update = (delta) => {
 }
 
 const draw = () => {
-  mainScene.draw(ctx, 0, 0);
+
+  // Clear anything stale
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  
+  skySprite.drawImage(ctx, 0 , 0);
+
+  // Save the current state (for camera offset)
+  ctx.save();
+
+  //Offset by camera position
+  ctx.translate(camera.position.x, camera.position.y);
+
+   // Draw objects in the mounted scene
+   mainScene.draw(ctx, 0, 0);
+
+   // Restore to original state
+   ctx.restore();
 };
 
 const gameLoop = new GameLoop(update, draw);
