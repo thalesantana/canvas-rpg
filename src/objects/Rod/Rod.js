@@ -40,7 +40,4 @@ export class Rod extends GameObject {
       position: this.position
     })
   }
-
-
-
 }
