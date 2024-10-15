@@ -60,6 +60,7 @@ export class Hero extends GameObject {
     this.itemPickupTime = 0;
     this.itemPickupShell = null;
 
+    // React to picking up an item
     events.on("HERO_PICKS_UP_ITEM", this, data => {
       this.onPickUpItem(data)
     })
