@@ -3,14 +3,14 @@ html, body {
   margin: 0;
   overflow: hidden;
   image-rendering: pixelated;
-  height: 100%; /* Adicione esta linha */
-  display: flex; /* Adicione esta linha */
-  justify-content: center; /* Adicione esta linha */
-  align-items: center; /* Adicione esta linha */
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: #1B1B1F;
 }
 
 canvas {
-  width: 1500px;
+  width: 1250px;
   max-width: 100%;
 }
